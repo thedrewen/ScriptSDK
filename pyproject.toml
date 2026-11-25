@@ -8,8 +8,7 @@ version = "1.8.4"
 description = "Use certain Endstone features directly on your add-ons. By using a JS file on your add-ons and the Endstone plugin."
 dependencies = [
     "colorama>=0.4.6",
-    "bstream == 1.0.1",
-    "bedrock_protocol == 0.0.1"
+    "bedrock_protocol == 0.5.0"
 ]
 
 [project.entry-points."endstone"]
