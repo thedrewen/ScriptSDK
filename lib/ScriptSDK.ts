@@ -8,20 +8,6 @@ import { Group } from "./src/groups";
 
 export const prefix = "[ScriptSDK] ";
 
-export type ServerInfo = {
-    ping: number;
-    edition: string;
-    gameMode: string;
-    mapName: string;
-    name: string;
-    players: {
-        online: number;
-        max: number;
-    }
-    serverId: number;
-    version: string;
-}
-
 declare module '@minecraft/server' {
     interface Player {
 
@@ -69,37 +55,10 @@ declare module '@minecraft/server' {
 
     interface System {
         groups: Group[];
-
-        /**
-         *  
-         */
-        getInfoFromExternalServer(host: string, port: number): Promise<ServerInfo>;
     }
 }
 
 system.groups = [];
-system.getInfoFromExternalServer = async (host, port) => {
-    const result = await ScriptSDK.send('getExternalServerInfo', [host, `${port}`], 9);
-    if (result.success) {
-        const data = result.result;
-        return {
-            ping: parseInt(data[0]),
-            edition: data[1],
-            gameMode: data[2],
-            mapName: data[3],
-            name: data[4],
-            players: {
-                online: parseInt(data[5]),
-                max: parseInt(data[6]),
-            },
-            serverId: parseInt(data[7]),
-            version: data[8]
-        }
-    } else {
-        throw new Error(prefix + result?.result[0]);
-    }
-
-}
 
 function loadPlayer(player: Player) {
     ScriptSDK.send('getPlayerIp', [player.name]).then((result) => {

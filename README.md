@@ -18,7 +18,6 @@ ScriptSDK is a dual-component system:
 ### 🔩 System Features
 
 - **system.groups** → `Group[]`: List of groups initialise
-- **system.getInfoFromExternalServer(ip, port)** -> `ServerInfo`: Provides information about an external server.
 
 ### 💫 Player Features
 
