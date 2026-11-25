@@ -1,41 +1,41 @@
 # CLAUDE.md
 
-Règles de travail pour ce dépôt. À respecter par Claude (et quiconque automatise des contributions) en plus des conventions habituelles.
+Working rules for this repository. Follow these (in addition to the usual conventions) whether you are Claude or anyone automating contributions.
 
-## Le projet
+## The project
 
-ScriptSDK a deux composants versionnés ensemble (même numéro de version dans `package.json` et `pyproject.toml`) :
-- **SDK JavaScript/TypeScript** (`lib/`) : compilé en JS via `npm run build` (sortie dans `dist/lib/`).
-- **Plugin Endstone** (`src/endstone_scriptsdk/`) : package Python, packagé en wheel via `npm run buildp` (sortie dans `dist/*.whl`).
+ScriptSDK has two components versioned together (same version number in `package.json` and `pyproject.toml`):
+- **JavaScript/TypeScript SDK** (`lib/`): compiled to JS via `npm run build` (output in `dist/lib/`).
+- **Endstone plugin** (`src/endstone_scriptsdk/`): Python package, packaged as a wheel via `npm run buildp` (output in `dist/*.whl`).
 
-## Branches et validation
+## Branches and validation
 
-- Toujours travailler sur une branche dédiée (feature/fix), jamais directement sur `develop` ou `main`.
-- Une branche se termine par une Pull Request. **Aucun merge n'est fait sans validation explicite de louis.charneux.**
-- Une fois validée, la PR est fusionnée dans `develop` en **merge squash** (un seul commit propre sur `develop`).
+- Always work on a dedicated branch (feature/fix), never directly on `develop` or `main`.
+- A branch ends with a Pull Request. **No merge happens without explicit validation from louis.charneux.**
+- Once validated, the PR is merged into `develop` as a **squash merge** (a single clean commit on `develop`).
 
-## Mise en production
+## Shipping to production
 
-Quand `develop` est prêt à partir en production :
+When `develop` is ready to ship:
 
-1. Fusionner `develop` dans `main` en **fast-forward** si possible (pas de merge commit). Si un fast-forward n'est pas possible, le signaler avant de faire autrement.
-2. Mettre à jour le numéro de version (semver) dans `package.json`, `pyproject.toml` et le badge de version du `README.md`, de façon cohérente entre les trois.
-3. Créer un tag annoté `vX.Y.Z` sur `main` (même version que les fichiers ci-dessus) et le pousser.
+1. Merge `develop` into `main` as a **fast-forward** if possible (no merge commit). If a fast-forward isn't possible, flag it before doing anything else.
+2. Bump the version number (semver) in `package.json`, `pyproject.toml`, and the version badge in `README.md`, keeping all three consistent.
+3. Create an annotated tag `vX.Y.Z` on `main` (matching the version in the files above) and push it.
 
-Le push du tag déclenche automatiquement le workflow `.github/workflows/release.yml`, qui :
-- compile le SDK JS et produit un zip du contenu compilé de `lib/`,
-- construit le wheel Python (`.whl`),
-- crée une **release GitHub en brouillon (draft)** nommée `vX.Y.Z`, avec les deux fichiers en pièces jointes et une description pré-remplie à partir de `.github/release_template.md`.
+Pushing the tag automatically triggers the `.github/workflows/release.yml` workflow, which:
+- compiles the JS SDK and produces a zip of the compiled contents of `lib/`,
+- builds the Python wheel (`.whl`),
+- creates a **draft GitHub release** named `vX.Y.Z`, with both files attached and a description pre-filled from `.github/release_template.md`.
 
-La description de la release est ensuite **complétée manuellement** (c'est un template, pas une génération automatique) avant de la publier depuis l'interface GitHub.
+The release description is then **filled in manually** (it's a template, not an auto-generated changelog) before publishing it from the GitHub UI.
 
-## Résumé du flux
+## Flow summary
 
 ```
-branche perso -> PR -> validation (louis.charneux) -> squash merge -> develop
+personal branch -> PR -> validation (louis.charneux) -> squash merge -> develop
 develop -> fast-forward -> main -> tag vX.Y.Z -> push
                                         |
                                         v
-                        workflow release.yml (build JS + wheel,
-                        draft release avec template à remplir)
+                        release.yml workflow (build JS + wheel,
+                        draft release with template to fill in)
 ```
