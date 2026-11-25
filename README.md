@@ -25,7 +25,6 @@ ScriptSDK is a dual-component system:
 - **player.ip** → `string | null`: Player's IP address (automatically populated when player spawns)
 - **player.xuid** → `string | null`: Player's Xbox User ID (automatically populated when player spawns)
 - **player.device_os** → `string | null`: Player's device OS (automatically populated when player spawns)
-- **player.getPing()** → `Promise<number>`: Get the player's current ping/latency in milliseconds
 - **player.setBossBar(title, color, style, percent)** → `Promise<void>`: Create and assign a boss bar to a player with customizable progress percentage (0-100)
 - **player.resetBossBar()** → `Promise<void>`: Reset boss bar to a player.
 - **player.sendToast(title, content)** → `Promise<void>`: Send toast notification.
@@ -127,7 +126,7 @@ scripts/
 
 ### For Server Administrators (Endstone Plugin)
 
-1. Download the latest plugin wheel (`.whl`) from [EndGit](https://endgit.dev/plugins/scriptsdk)
+1. Download the latest plugin wheel (`.whl`) from [GitHub Releases](https://github.com/Bedrock-Developpeur-Francophone/ScriptSDK/releases)
 2. Place the `.whl` file in your Endstone server's `plugins` folder
 3. Restart your server
 

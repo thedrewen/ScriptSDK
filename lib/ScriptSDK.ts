@@ -40,12 +40,7 @@ declare module '@minecraft/server' {
         resetBossBar(): Promise<void>;
 
         /**
-         * Get the player's ping
-         */
-        getPing(): Promise<number>;
-
-        /**
-         * Send toast notification. 
+         * Send toast notification.
          */
         sendToast(title: string, content: string): Promise<void>;
 
@@ -148,15 +143,6 @@ function loadPlayer(player: Player) {
             if (result?.code == 404) throw new NotFoundException(prefix + result?.result[0]);
             throw new Error(prefix + result?.result[0]);
         }
-    }
-
-    player.getPing = async () => {
-        const result = await ScriptSDK.send('getPlayerPing', [player.name]);
-        if (!result?.success) {
-            if (result?.code == 404) throw new NotFoundException(prefix + result?.result[0]);
-            throw new Error(prefix + result?.result[0]);
-        }
-        return parseInt(result.result[0]);
     }
 
     player.sendToast = async (title, content) => {

@@ -15,8 +15,6 @@ class PlayerData:
             match action:
                 case 'getPlayerIp':
                     return handler.response(uuid, True, 200, [player.address.hostname])
-                case 'getPlayerPing':
-                    return handler.response(uuid, True, 200, [str(player.ping)])
                 case 'getPlayerXuid':
                     return handler.response(uuid, True, 200, [player.xuid])
                 case 'getPlayerOS':
