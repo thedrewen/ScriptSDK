@@ -19,23 +19,28 @@ ScriptSDK has two components versioned together (same version number in `package
 When `develop` is ready to ship:
 
 1. Merge `develop` into `main` as a **fast-forward** if possible (no merge commit). If a fast-forward isn't possible, flag it before doing anything else.
-2. Bump the version number (semver) in `package.json`, `pyproject.toml`, and the version badge in `README.md`, keeping all three consistent.
-3. Create an annotated tag `vX.Y.Z` on `main` (matching the version in the files above) and push it.
+2. Bump the version number (semver) in `package.json`, `package-lock.json`, `pyproject.toml`, and the version badge in `README.md`, keeping all consistent.
+3. The tag `vX.Y.Z` (matching the version in the files above) must be created by a human, not pushed by an automated agent: tag protection rules on `v*` reject pushes from Claude's GitHub App. So Claude (or whoever automates this) stops here and:
+   - asks louis.charneux to create and push the tag themselves — simplest via GitHub's "Draft a new release" UI (tag `vX.Y.Z` targeting `main`, then **Publish**, since the tag is only created/pushed on publish, not on save-as-draft),
+   - hands them a filled-in release description, written to the structure of `.github/release_template.md` but with the sections actually filled from the real changes since the previous tag (not left as placeholders).
 
 Pushing the tag automatically triggers the `.github/workflows/release.yml` workflow, which:
 - compiles the JS SDK and produces a zip of the compiled contents of `lib/`,
 - builds the Python wheel (`.whl`),
-- creates a **draft GitHub release** named `vX.Y.Z`, with both files attached and a description pre-filled from `.github/release_template.md`.
+- creates/updates a **draft GitHub release** named `vX.Y.Z`, with both files attached and the description reset to the raw `.github/release_template.md` placeholders (it always overwrites the body).
 
-The release description is then **filled in manually** (it's a template, not an auto-generated changelog) before publishing it from the GitHub UI.
+So the filled description Claude prepared is pasted in manually, replacing the placeholders, before publishing the release from the GitHub UI.
 
 ## Flow summary
 
 ```
 personal branch -> PR -> validation (louis.charneux) -> squash merge -> develop
-develop -> fast-forward -> main -> tag vX.Y.Z -> push
-                                        |
-                                        v
-                        release.yml workflow (build JS + wheel,
-                        draft release with template to fill in)
+develop -> fast-forward -> main -> bump version -> louis.charneux creates & pushes tag vX.Y.Z
+                                                                |
+                                                                v
+                                        release.yml workflow (build JS + wheel,
+                                        draft release, body reset to template)
+                                                                |
+                                                                v
+                                picks up Claude's filled description -> publish
 ```
